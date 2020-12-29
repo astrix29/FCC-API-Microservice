@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
 	res.render("./index.html");
 });
 
-app.get("/api/timestamp/:date", (req, res) => {
+app.get("/api/timestamp/:date?", (req, res) => {
 	const date = req.params.date;
 
 	const utcFormat = date.includes("-")
