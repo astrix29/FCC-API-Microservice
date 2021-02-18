@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 
 // Middlewareap
 app.use(express.static("public"));
+app.use(cors());
 
 app.get("/", (req, res) => {
 	res.render("./index.html");
