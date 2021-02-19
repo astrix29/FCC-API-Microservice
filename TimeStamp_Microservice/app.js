@@ -1,39 +1,49 @@
-const express = require("express");
-const app = express();
+const express = require('express');
 const cors = require('cors');
+const app = express();
 
-// Middlewareap
-app.use(express.static("public"));
+// Middlewares
+app.use(express.static('public'));
 app.use(cors());
 
-app.get("/", (req, res) => {
-	res.render("./index.html");
-});
+// [+] Routes [+]
 
-app.get("/api/timestamp/:date?", (req, res) => {
-	const date = req.params.date;
+// Root route
+app.get('', (req, res) => {
+	res.render('index.html');
+})
 
-	const utcFormat = date.includes("-")
-		? new Date(date).toUTCString()
-		: new Date(Number(date)).toUTCString();
-	const unixFormat = !date.includes("-")
-		? Number(date)
-		: new Date(date).getTime();
+// /api/time/:date
+app.get('/api/timestamp/:date', (req, res) => {
+	// Grab the date from the URL
+	let date = req.params.date;
+	// create an empty response object
+	const responseObj = new Object();
 
-	if (utcFormat && unixFormat) {
-		res.json({ unix: unixFormat, utc: utcFormat });
+	if (date.includes('-')) {
+		responseObj.unix = new Date(date).getTime();
+		responseObj.utc = new Date(date).toUTCString();
+		// Send the responseObject in the response
+		res.send(responseObj);
 	} else {
-		res.json({ error: "Invalid Date" });
+		date = parseInt(date);
+		responseObj.unix = new Date(date).getTime();
+		responseObj.utc = new Date(date).toUTCString();
+		// Send the responseObject in the response
+		res.send(responseObj);
 	}
-});
+})
 
-app.get("/api/timestamp", (req, res) => {
-	const utcFormat = new Date().toUTCString();
-	const unixFormat = new Date().getTime();
+// /api/timestamp
+app.get('/api/timestamp', (req, res) => {
+	const response = {
+		unix: new Date().getTime(),
+		utc: new Date().toUTCString()
+	}
 
-	res.json({ unix: unixFormat, utc: utcFormat });
-});
+	res.send(response);
+})
 
 app.listen(3000, () => {
 	console.log("Listening on port 3000");
-});
+})
