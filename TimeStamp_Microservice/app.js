@@ -4,7 +4,8 @@ const app = express();
 
 // Middlewares
 app.use(express.static('public'));
-app.use(cors());
+app.use(cors({optionSuccessStatus: 200}));  // some legacy browsers choke on 204
+
 
 // [+] Routes [+]
 
@@ -17,20 +18,21 @@ app.get('', (req, res) => {
 app.get('/api/timestamp/:date', (req, res) => {
 	// Grab the date from the URL
 	let date = req.params.date;
+
+	if (date.includes(" ")) {
+		date = date.split(" ").join("-");
+	}
+
 	// create an empty response object
 	const responseObj = new Object();
 
-	if (date.includes('-')) {
-		responseObj.unix = new Date(date).getTime();
-		responseObj.utc = new Date(date).toUTCString();
-		// Send the responseObject in the response
-		res.send(responseObj);
+	const unix = date.includes('-') ? new Date(date).getTime() : new Date(parseInt(date)).getTime();
+	const utc = date.includes('-') ? new Date(date).toUTCString() : new Date(parseInt(date)).toUTCString();
+
+	if (unix && utc) {
+		res.json({ unix, utc });
 	} else {
-		date = parseInt(date);
-		responseObj.unix = new Date(date).getTime();
-		responseObj.utc = new Date(date).toUTCString();
-		// Send the responseObject in the response
-		res.send(responseObj);
+		res.json({ error: "Invalid Date" });
 	}
 })
 
@@ -41,7 +43,7 @@ app.get('/api/timestamp', (req, res) => {
 		utc: new Date().toUTCString()
 	}
 
-	res.send(response);
+	res.json(response);
 })
 
 app.listen(3000, () => {
