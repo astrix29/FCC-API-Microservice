@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 });
 
 // it is very crucial that the file name matches the name attribute in your html
-app.post('/api/fileanalyse', upload.single('file-to-upload'), (req, res) => {
+app.post('/api/fileanalyse', upload.single('upfile'), (req, res) => {
 	// Get the desired values from the file and store them in an object
 	const respObj = {
 		name: req.file.originalname,
