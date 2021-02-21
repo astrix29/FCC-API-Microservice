@@ -1,0 +1,40 @@
+body {
+	font-family: sans-serif;
+    max-width: 1800px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+    background-color: #f1f1f1;
+}
+
+a {
+	color: #058fb3;
+}
+
+main div {
+	padding-top: 1rem;
+	margin: auto;
+}
+
+.input-div {
+	max-width: 60vw;
+}
+
+.choose-file{
+	border: 1px solid grey;
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.upload-btn {
+	width: 250px;
+	margin-top: 20px;
+}
+
+.footer-content {
+	width: 100%;
+	display: block;
+}

@@ -1,51 +1,37 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
+const cors = require('cors');
+const fs = require('fs');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // save file into /uploads folder
 
-// Middlewares
 app.use(express.static('public'));
-app.use(cors({optionSuccessStatus: 200}));  // some legacy browsers choke on 204
+app.use(cors());
 
-
-// [+] Routes [+]
-
-// Root route
-app.get('', (req, res) => {
+app.get('/', (req, res) => {
 	res.render('index.html');
-})
+});
 
-// /api/time/:date
-app.get('/api/timestamp/:date', (req, res) => {
-	// Grab the date from the URL
-	let date = req.params.date;
+// it is very crucial that the file name matches the name attribute in your html
+app.post('/api/fileanalyse', upload.single('file-to-upload'), (req, res) => {
+	// Get the desired values from the file and store them in an object
+	const respObj = {
+		name: req.file.originalname,
+		type: req.file.mimetype,
+		size: req.file.size
+	};
+	console.log(req.file.filename);
 
-	if (date.includes(" ")) {
-		date = date.split(" ").join("-");
-	}
+	// Delete the file
+	fs.unlink(`./uploads/${req.file.filename}`, (err) => {
+		if (err) console.log(err.message);
+		else console.log(`${req.file.filename} deleted succesfully!`);
+	});
 
-	// create an empty response object
-	const responseObj = new Object();
-
-	const unix = date.includes('-') ? new Date(date).getTime() : new Date(parseInt(date)).getTime();
-	const utc = date.includes('-') ? new Date(date).toUTCString() : new Date(parseInt(date)).toUTCString();
-
-	if (unix && utc) {
-		res.json({ unix, utc });
-	} else {
-		res.json({ error: "Invalid Date" });
-	}
-})
-
-// /api/timestamp
-app.get('/api/timestamp', (req, res) => {
-	const response = {
-		unix: new Date().getTime(),
-		utc: new Date().toUTCString()
-	}
-
-	res.json(response);
+	// Send the response object 
+	res.json(respObj);
 })
 
 app.listen(3000, () => {
 	console.log("Listening on port 3000");
-})
+});

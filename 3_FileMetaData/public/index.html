@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>File Meta Data Service</title>
+    <link rel="stylesheet" href="./style.css">
+
+<body>
+    <header>
+        <h1>File Meta Data Service</h1>
+    </header>
+    <main>
+        <div class="usage">
+            <h2>Usage:</h2>
+            <p>Please Upload a File...</p>
+        </div>
+        <div class="input-div">
+            <form action="/api/fileanalyse" method="post" enctype="multipart/form-data" class="choose-file">
+            	<input type="file" id="file-selector" name="file-to-upload">
+            	<button type="submit" class="upload-btn">Upload</button>
+            </form>
+        </div>
+        <footer>
+            <div class="footer-content">
+                Made by <a href="https://www.freecodecamp.org/arsen1c" target="_blank">Arsenic</a>
+            </div>
+        </footer>
+    </main>
+</body>
+
+</html>
